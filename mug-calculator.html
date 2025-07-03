@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mug Printing Promo Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      margin: 0;
+      background: #f4f4f4;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      max-width: 500px;
+      width: 100%;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      font-size: 1em;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      background: #fff;
+      padding: 15px;
+      border-left: 5px solid #007bff;
+      word-wrap: break-word;
+    }
+    .note {
+      font-size: 0.875em;
+      color: rgba(0, 0, 0, 0.8);
+      margin-top: 5px;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      .container {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Mug Printing Calculator</h2>
+
+    <label for="promo">Choose a Promo:</label>
+    <select id="promo" onchange="setDefaultMinQty()">
+      <option value="a">Promo A - ₱99 / piece (Min 5 pcs)</option>
+      <option value="b">Promo B - ₱100 / piece (Min 5 pcs)</option>
+      <option value="c">Promo C - ₱99 / piece (Min 36 pcs)</option>
+      <option value="d">Promo D - ₱199 / piece (Min 1 pc)</option>
+    </select>
+
+    <label for="qty">Enter Quantity:</label>
+    <input type="number" id="qty" min="1" placeholder="e.g. 10" oninput="enforceMinQty()">
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="result" id="output"></div>
+  </div>
+
+  <script>
+    let minQtyMap = {
+      a: 5,
+      b: 5,
+      c: 36,
+      d: 1
+    };
+
+    let priceMap = {
+      a: 99,
+      b: 100,
+      c: 99,
+      d: 199
+    };
+
+    let extraNote = {
+      a: "Ang minimum order ay 5pcs at FREE layout na kung pare-pareho ang design sa bawat mug. (example; corporate or giveaway mug).",
+      b: "FREE layout. Ang minimum order ay 5pcs kung iba-iba ang design sa bawat mug.",
+      c: "FREE layout kung isang design lang pero variable ang names at photo. (Ang minimum order is 36 pieces).",
+      d: "1pc FREE layout using the design tool or your own ready made design."
+    };
+
+    function setDefaultMinQty() {
+      const promo = document.getElementById('promo').value;
+      const qtyInput = document.getElementById('qty');
+      const min = minQtyMap[promo];
+
+      qtyInput.min = min;
+      qtyInput.value = min;
+      qtyInput.placeholder = `Minimum ${min} pcs`;
+    }
+
+    function enforceMinQty() {
+      const promo = document.getElementById('promo').value;
+      const qtyInput = document.getElementById('qty');
+      const min = minQtyMap[promo];
+
+      if (parseInt(qtyInput.value) < min) {
+        qtyInput.value = min;
+      }
+    }
+
+    function calculate() {
+      const promo = document.getElementById('promo').value;
+      const qty = parseInt(document.getElementById('qty').value);
+      const pricePerPiece = priceMap[promo];
+      const minQty = minQtyMap[promo];
+
+      if (qty < minQty) {
+        document.getElementById('output').innerHTML = `Minimum quantity for this promo is ${minQty}.`;
+        return;
+      }
+
+      const total = pricePerPiece * qty;
+
+      const promoLabel = {
+        a: "Promo A - ₱99 / piece (Min 5 pcs)",
+        b: "Promo B - ₱100 / piece (Min 5 pcs)",
+        c: "Promo C - ₱99 / piece (Min 36 pcs)",
+        d: "Promo D - ₱199 / piece (Min 1 pc)"
+      };
+
+      document.getElementById('output').innerHTML =
+        `<strong>Summary:</strong><br>
+        Promo Selected: ${promoLabel[promo]}<br>
+        <div class="note">${extraNote[promo]}</div>
+        Quantity: ${qty}<br>
+        Total Price: <strong>₱${total.toFixed(2)}</strong>`;
+    }
+
+    window.onload = setDefaultMinQty;
+  </script>
+
+</body>
+</html>
