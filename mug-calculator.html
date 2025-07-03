@@ -31,7 +31,7 @@
       display: block;
     }
     select, input[type="number"] {
-      width: 100%;
+      width: %;
       padding: 10px;
       margin-top: 5px;
       font-size: 1em;
@@ -80,7 +80,7 @@
     <label for="promo">Choose a Promo:</label>
     <select id="promo" onchange="setDefaultMinQty()">
       <option value="a">Promo A - ₱99 / piece (Min 5 pcs)</option>
-      <option value="b">Promo B - ₱100 / piece (Min 5 pcs)</option>
+      <option value="b">Promo B - ₱150 / piece (Min 5 pcs)</option>
       <option value="c">Promo C - ₱99 / piece (Min 36 pcs)</option>
       <option value="d">Promo D - ₱199 / piece (Min 1 pc)</option>
     </select>
@@ -103,7 +103,7 @@
 
     let priceMap = {
       a: 99,
-      b: 100,
+      b: 150,
       c: 99,
       d: 199
     };
@@ -150,7 +150,7 @@
 
       const promoLabel = {
         a: "Promo A - ₱99 / piece (Min 5 pcs)",
-        b: "Promo B - ₱100 / piece (Min 5 pcs)",
+        b: "Promo B - ₱150 / piece (Min 5 pcs)",
         c: "Promo C - ₱99 / piece (Min 36 pcs)",
         d: "Promo D - ₱199 / piece (Min 1 pc)"
       };
