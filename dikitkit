@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Mug Printing Promo Calculator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Mobile responsiveness -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -57,8 +57,8 @@
       word-wrap: break-word;
     }
     .note {
-      font-size: 0.875em; /* smaller font */
-      color: rgba(0, 0, 0, 0.8); /* 80% black */
+      font-size: 0.875em;
+      color: rgba(0, 0, 0, 0.8);
       margin-top: 5px;
     }
 
