@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hangtag Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      margin: 0;
+      background: #f4f4f4;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      max-width: 500px;
+      width: 100%;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      font-size: 1em;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      background: #fff;
+      padding: 15px;
+      border-left: 5px solid #28a745;
+      word-wrap: break-word;
+    }
+    .note {
+      font-size: 0.875em;
+      color: rgba(0, 0, 0, 0.8);
+      margin-top: 5px;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      .container {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Hangtag Calculator</h2>
+    <label for="qty">Enter Quantity:</label>
+    <input type="number" id="qty" min="12" placeholder="Minimum 12 pcs" />
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="result" id="output"></div>
+  </div>
+
+  <script>
+    function calculate() {
+      const qtyInput = document.getElementById('qty');
+      const qty = parseInt(qtyInput.value);
+
+      if (isNaN(qty) || qty < 12) {
+        qtyInput.value = 12;
+        document.getElementById('output').innerHTML = "Minimum order is 12 pieces.";
+        return;
+      }
+
+      let pricePerSet, setQty, promoLabel, note;
+
+      if (qty >= 36) {
+        // Promo B logic
+        pricePerSet = 17;
+        setQty = 36;
+        promoLabel = "Promo Package B - ₱17.00 / pc (Min 36 pcs)";
+        note = "Mas sulit ito! You're getting Promo B pricing because you ordered 36 pcs or more.";
+      } else {
+        // Promo A logic
+        pricePerSet = 20;
+        setQty = 12;
+        promoLabel = "Promo Package A - ₱20.00 / pc (Min 12 pcs)";
+        note = "You're getting Promo A pricing for ordering at least 12 pcs. Order 36+ for a bigger discount.";
+      }
+
+      const total = pricePerSet * setQty * Math.ceil(qty / setQty);
+
+      document.getElementById('output').innerHTML = 
+        `<strong>Summary:</strong><br>
+        Promo Selected: ${promoLabel}<br>
+        <div class="note">${note}</div>
+        Quantity Ordered: ${qty}<br>
+        Total Price: <strong>₱${total.toFixed(2)}</strong>`;
+    }
+  </script>
+</body>
+</html>
