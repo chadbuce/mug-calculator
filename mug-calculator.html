@@ -25,23 +25,20 @@
       color: #333;
       margin-bottom: 20px;
     }
-    label {
-      font-weight: bold;
-      margin-top: 10px;
+    label, select, input {
       display: block;
-    }
-    select, input[type="number"] {
-      width: %;
-      padding: 10px;
-      margin-top: 5px;
+      width: 100%;
+      margin-bottom: 15px;
       font-size: 1em;
+    }
+    input, select {
+      padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
     }
     button {
       width: 100%;
       padding: 12px;
-      margin-top: 15px;
       font-size: 1em;
       background: #007bff;
       color: white;
@@ -61,110 +58,79 @@
       color: rgba(0, 0, 0, 0.8);
       margin-top: 5px;
     }
-
-    @media (max-width: 480px) {
-      body {
-        padding: 10px;
-      }
-      .container {
-        padding: 15px;
-      }
-    }
   </style>
 </head>
 <body>
-
   <div class="container">
     <h2>Mug Printing Calculator</h2>
-
-    <label for="promo">Choose a Promo:</label>
-    <select id="promo" onchange="setDefaultMinQty()">
-      <option value="a">Promo A - ₱99 / piece (Min 5 pcs)</option>
-      <option value="b">Promo B - ₱150 / piece (Min 5 pcs)</option>
+    <label for="promo">Choose Promo:</label>
+    <select id="promo">
+      <option value="a">Promo A - ₱99 / piece (Min 5 pcs)</option> 
+      <option value="b">Promo B - ₱100 / piece (Min 5 pcs)</option>
       <option value="c">Promo C - ₱99 / piece (Min 36 pcs)</option>
       <option value="d">Promo D - ₱199 / piece (Min 1 pc)</option>
     </select>
 
-    <label for="qty">Enter Quantity:</label>
-    <input type="number" id="qty" min="1" placeholder="e.g. 10" oninput="enforceMinQty()">
+    <label for="quantity">Enter Quantity:</label>
+    <input type="number" id="quantity" placeholder="Enter quantity" />
 
     <button onclick="calculate()">Calculate</button>
 
-    <div class="result" id="output"></div>
+    <div class="result" id="result"></div>
   </div>
 
   <script>
-    let minQtyMap = {
-      a: 5,
-      b: 5,
-      c: 36,
-      d: 1
-    };
-
-    let priceMap = {
-      a: 99,
-      b: 150,
-      c: 99,
-      d: 199
-    };
-
-    let extraNote = {
-      a: "Ang minimum order ay 5pcs at FREE layout na kung pare-pareho ang design sa bawat mug. (example; corporate or giveaway mug).",
-      b: "FREE layout. Ang minimum order ay 5pcs kung iba-iba ang design sa bawat mug.",
-      c: "FREE layout kung isang design lang pero variable ang names at photo. (Ang minimum order is 36 pieces).",
-      d: "1pc FREE layout using the design tool or your own ready made design."
-    };
-
-    function setDefaultMinQty() {
-      const promo = document.getElementById('promo').value;
-      const qtyInput = document.getElementById('qty');
-      const min = minQtyMap[promo];
-
-      qtyInput.min = min;
-      qtyInput.value = min;
-      qtyInput.placeholder = `Minimum ${min} pcs`;
-    }
-
-    function enforceMinQty() {
-      const promo = document.getElementById('promo').value;
-      const qtyInput = document.getElementById('qty');
-      const min = minQtyMap[promo];
-
-      if (parseInt(qtyInput.value) < min) {
-        qtyInput.value = min;
-      }
-    }
-
     function calculate() {
-      const promo = document.getElementById('promo').value;
-      const qty = parseInt(document.getElementById('qty').value);
-      const pricePerPiece = priceMap[promo];
-      const minQty = minQtyMap[promo];
+      const promo = document.getElementById("promo").value;
+      const quantity = parseInt(document.getElementById("quantity").value);
+      const result = document.getElementById("result");
 
-      if (qty < minQty) {
-        document.getElementById('output').innerHTML = `Minimum quantity for this promo is ${minQty}.`;
+      let price = 0;
+      let minQty = 0;
+      let description = "";
+
+      if (isNaN(quantity)) {
+        result.innerHTML = "Please enter a valid quantity.";
         return;
       }
 
-      const total = pricePerPiece * qty;
+      switch (promo) {
+        case "a":
+          price = 99;
+          minQty = 5;
+          description = "Ang minimum order ay 5pcs at FREE layout na kung pare-pareho ang design sa bawat mug. (example; corporate or giveaway mug).";
+          break;
+        case "b":
+          price = 100;
+          minQty = 5;
+          description = "FREE layout. Ang minimum order ay 5pcs kung iba-iba ang design sa bawat mug.";
+          break;
+        case "c":
+          price = 99;
+          minQty = 36;
+          description = "FREE layout kung isang design lang pero variable ang names at photo. (Ang minimum order is 36 pieces).";
+          break;
+        case "d":
+          price = 199;
+          minQty = 1;
+          description = "1pc FREE layout using the design tool or your own ready made design.";
+          break;
+      }
 
-      const promoLabel = {
-        a: "Promo A - ₱99 / piece (Min 5 pcs)",
-        b: "Promo B - ₱150 / piece (Min 5 pcs)",
-        c: "Promo C - ₱99 / piece (Min 36 pcs)",
-        d: "Promo D - ₱199 / piece (Min 1 pc)"
-      };
+      if (quantity < minQty) {
+        result.innerHTML = `Minimum quantity for this promo is ${minQty} pcs.`;
+        return;
+      }
 
-      document.getElementById('output').innerHTML =
-        `<strong>Summary:</strong><br>
-        Promo Selected: ${promoLabel[promo]}<br>
-        <div class="note">${extraNote[promo]}</div>
-        Quantity: ${qty}<br>
-        Total Price: <strong>₱${total.toFixed(2)}</strong>`;
+      const total = price * quantity;
+
+      result.innerHTML = `
+        <strong>Promo Selected:</strong> Promo ${promo.toUpperCase()}<br>
+        <div class="note">${description}</div><br>
+        <strong>Quantity:</strong> ${quantity}<br>
+        <strong>Total Price:</strong> ₱${total.toFixed(2)}
+      `;
     }
-
-    window.onload = setDefaultMinQty;
   </script>
-
 </body>
 </html>
